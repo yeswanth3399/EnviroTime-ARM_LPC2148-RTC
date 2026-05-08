@@ -1,0 +1,11 @@
+Objects/
+Listings/
+
+*.axf
+*.o
+*.d
+*.bak
+*.tmp
+*.uvoptx
+*.dep
+*.lnp
