@@ -44,17 +44,36 @@ int password_check(char *stored)
 state_t menu_handler(void)
 {
     u8 k;
+		u32 elapsed=0;
     CmdLCD(CLEAR_LCD);
     StrLCD("1:Tim 2:Alarm");
     CmdLCD(GOTO_LINE2_POS0);
     StrLCD("3:Pass 4:Ext");
 
     
-    do{ 
-			k = KeyScan(); 
-		}while(!k);
-    while(!ColScan());
+    // -------------------------
+    // WAIT FOR KEY / TIMEOUT
+    // -------------------------
 
+    while(ColScan())
+    {
+        tdelay_ms(1);
+        elapsed++;
+
+        // 10 sec timeout
+        if(elapsed >= 10000)
+        {
+					CmdLCD(CLEAR_LCD);
+					StrLCD("TIMEOUT");
+					tdelay_ms(1000);
+					return STATE_NORMAL;
+        }
+    }
+    
+		k = KeyScan();
+    while(!ColScan());
+    tdelay_ms(20);
+		
     if(k=='1') 
 		{
 			return STATE_EDIT_TIME; // STATE_EDIT_TIME

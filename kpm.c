@@ -140,7 +140,7 @@ u32 ReadNumTimeout(u32 timeout_ms)
 				CmdLCD(GOTO_LINE2_POS0);
 				StrLCD("               ");
 				CmdLCD(GOTO_LINE2_POS0);
-				StrLCD("No Input");
+				StrLCD("Give Input");
 				tdelay_ms(500);
 				CmdLCD(GOTO_LINE2_POS0);
 				StrLCD("               ");
@@ -157,7 +157,13 @@ u32 ReadNumTimeout(u32 timeout_ms)
 			{
 				sum=sum/10;
 				digits--;
-
+				
+				// Reset input flag when all deleted
+        if(sum == 0)
+        {
+            digit_flag = 0;
+        }
+				
 				CmdLCD(GOTO_LINE2_POS0);
 				StrLCD("               ");
 				CmdLCD(GOTO_LINE2_POS0);

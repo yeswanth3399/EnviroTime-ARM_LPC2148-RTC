@@ -76,9 +76,9 @@ int main()
 				break;
 			
 			case STATE_SET_ALARM: 
-				alarm_set();
-				state=STATE_MENU;
-				break;
+				alarm_menu();
+			  state = STATE_MENU;
+        break;
 			
 			case STATE_CHANGE_PASSWORD: 
 				change_password(stored_pass);
