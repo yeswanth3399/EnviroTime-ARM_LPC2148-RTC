@@ -4,7 +4,7 @@
 // ---------------- GPIO PINS ----------------
 
 // Buzzer
-#define BUZZER_PIN 7  // P0.7
+#define BUZZER_PIN 19  // P0.19
 
 // Menu/Edit switch
 #define EDIT_PIN          (1<<22)   // P0.22 (menu switch)

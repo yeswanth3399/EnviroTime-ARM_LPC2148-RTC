@@ -20,7 +20,14 @@ void alarm_set(void)
         CmdLCD(CLEAR_LCD);
         StrLCD("Hr(0-23):");
         CmdLCD(GOTO_LINE2_POS0);
-        hr = ReadNum();
+        hr = ReadNumTimeout(10000);
+		if(hr== TIMEOUT_NUM)
+		{
+			CmdLCD(CLEAR_LCD);
+			StrLCD("TIMEOUT");
+			tdelay_ms(1000);
+			return;
+		}
 
         if(hr <= 23)
             break;
@@ -36,7 +43,14 @@ void alarm_set(void)
         CmdLCD(CLEAR_LCD);
         StrLCD("Min(0-59):");
         CmdLCD(GOTO_LINE2_POS0);
-        min = ReadNum();
+        min = ReadNumTimeout(10000);
+		if(min== TIMEOUT_NUM)
+		{
+			CmdLCD(CLEAR_LCD);
+			StrLCD("TIMEOUT");
+			tdelay_ms(1000);
+			return;
+		}
 
         if(min <= 59)
             break;
@@ -52,7 +66,14 @@ void alarm_set(void)
         CmdLCD(CLEAR_LCD);
         StrLCD("Sec(0-59):");
         CmdLCD(GOTO_LINE2_POS0);
-        sec = ReadNum();
+        sec = ReadNumTimeout(10000);
+		if(sec== TIMEOUT_NUM)
+		{
+			CmdLCD(CLEAR_LCD);
+			StrLCD("TIMEOUT");
+			tdelay_ms(1000);
+			return;
+		}
 
         if(sec <= 59)
             break;

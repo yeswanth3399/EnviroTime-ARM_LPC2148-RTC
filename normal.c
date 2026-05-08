@@ -9,7 +9,7 @@
 
 
 extern state_t state;
-s32 hour,min,sec,date,month,year,day;
+s32 hour=0,min=0,sec=0,date,month,year,day;
 enum days{SUN,MON,TUE,WED,THU,FRI,SAT};
 
 state_t normal_mode(void)
@@ -28,7 +28,8 @@ state_t normal_mode(void)
 
 	CmdLCD(GOTO_LINE1_POS0+11);
 	S32LCD(tDegC);
-	StrLCD("dC ");
+	CharLCD(0xDF);
+	CharLCD('C');
 	
 	// Get and display the current date info on LCD
 	GetRTCDateInfo(&date,&month,&year);

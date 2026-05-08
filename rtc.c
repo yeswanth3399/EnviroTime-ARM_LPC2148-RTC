@@ -44,6 +44,14 @@ void GetRTCTimeInfo(s32 *hour, s32 *minute, s32 *second)
 	*hour = HOUR;
 	*minute = MIN;
 	*second = SEC;
+
+	//Prevent Invalid RTC values
+	if(*hour >23)
+		*hour=0;
+	if(*minute >59)
+		*minute=0;
+	if(*second >59)
+		*second=0;
 }
 
 /*

@@ -2,7 +2,7 @@
 #include <LPC21xx.h>
 #include "types.h"
 #include "defines.h"
-#include "timer0_delay.h"
+#include "delays.h"
 #include "lcd_defines.h"
 
 void WriteLCD(u8 bytes)
@@ -13,9 +13,9 @@ void WriteLCD(u8 bytes)
 	WRITEBYTE(IOPIN0, LCD_DATA, bytes);
 	//provide high to low pulse for latching
 	IOSET0=1<<LCD_EN;
-	tdelay_us(1);
+	delay_us(1);
 	IOCLR0=1<<LCD_EN;
-	tdelay_ms(2);
+	delay_ms(2);
 }
 void CmdLCD(u8 cmd)
 {
@@ -32,12 +32,12 @@ void InitLCD(void)
 	SETBIT(IODIR0, LCD_RW);
 	SETBIT(IODIR0, LCD_EN);
 	//power on delay
-	tdelay_ms(15);
+	delay_ms(15);
 	CmdLCD(0x30);
-	tdelay_ms(4);
-	tdelay_us(100);
+	delay_ms(4);
+	delay_us(100);
 	CmdLCD(0x30);
-	tdelay_us(100);
+	delay_us(100);
 	CmdLCD(0x30);
 	CmdLCD(MODE_8BIT_2LINE);
 	CmdLCD(DSP_ON_CUR_BLINK);

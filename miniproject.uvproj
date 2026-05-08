@@ -488,6 +488,11 @@
               <FileType>1</FileType>
               <FilePath>.\alarm_ring.c</FilePath>
             </File>
+            <File>
+              <FileName>delays.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\delays.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

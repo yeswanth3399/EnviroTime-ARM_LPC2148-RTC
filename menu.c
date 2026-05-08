@@ -6,30 +6,6 @@
 #include "timer0_delay.h"
 #include <string.h>
 
-// masked string input, ends with '#'
-static void read_str(char *buf, u8 maxlen)
-{
-    u8 i=0,k;
-    while(1)
-    {
-        k = KeyScan();
-        if(!k) continue;
-        // ENTER key
-        if(k=='#')
-        {
-            while(ColScan()==0);   // wait release
-            break;
-        }
-
-        if(i < maxlen-1){
-            buf[i++] = k;
-            CharLCD('*');
-        }
-        while(!ColScan());
-    }
-    buf[i]='\0';
-}
-
 int password_check(char *stored)
 {
     char in[8];
@@ -41,7 +17,14 @@ int password_check(char *stored)
         StrLCD("Enter Pass:");
         CmdLCD(GOTO_LINE2_POS0);
 
-        read_str(in, sizeof(in));
+		//timeout check
+        if((read_str_timeout(in, sizeof(in),10000)) ==TIMEOUT_STR)
+		{
+			CmdLCD(CLEAR_LCD);
+			StrLCD("TIMEOUT");
+			tdelay_ms(1000);
+			return 0;
+		}
 
         if(strcmp(in,stored)==0)
             return 1;
@@ -60,12 +43,13 @@ int password_check(char *stored)
 
 state_t menu_handler(void)
 {
+    u8 k;
     CmdLCD(CLEAR_LCD);
     StrLCD("1:Tim 2:Alarm");
     CmdLCD(GOTO_LINE2_POS0);
     StrLCD("3:Pass 4:Ext");
 
-    u8 k;
+    
     do{ 
 			k = KeyScan(); 
 		}while(!k);
@@ -98,7 +82,14 @@ void change_password(char *stored)
 
     CmdLCD(CLEAR_LCD); StrLCD("Old:");
     CmdLCD(GOTO_LINE2_POS0);
-    read_str(oldp, sizeof(oldp));
+    
+	if((read_str_timeout(oldp, sizeof(oldp), 10000)))
+	{
+		CmdLCD(CLEAR_LCD);
+		StrLCD("TIME_OUT");
+		tdelay_ms(1000);
+		return;
+	}
 
     if(strcmp(oldp,stored)!=0)
 			{
@@ -112,13 +103,25 @@ void change_password(char *stored)
 		CmdLCD(GOTO_LINE1_POS0);
 		StrLCD("New:");
     CmdLCD(GOTO_LINE2_POS0);
-    read_str(newp, sizeof(newp));
+    if((read_str_timeout(newp, sizeof(newp),10000)))
+	{
+		CmdLCD(CLEAR_LCD);
+		StrLCD("TIME_OUT");
+		tdelay_ms(1000);
+		return;
+	}
 
     CmdLCD(CLEAR_LCD); 
 		CmdLCD(GOTO_LINE1_POS0);
 		StrLCD("Conf:");
     CmdLCD(GOTO_LINE2_POS0);
-    read_str(conf, sizeof(conf));
+    if((read_str_timeout(conf, sizeof(conf),10000)))
+	{
+		CmdLCD(CLEAR_LCD);
+		StrLCD("TIME_OUT");
+		tdelay_ms(1000);
+		return;
+	}
 
     if(strcmp(newp,conf)!=0)
 		{
