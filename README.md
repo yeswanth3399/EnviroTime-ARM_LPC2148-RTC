@@ -4,8 +4,13 @@
 
 ## Project Overview
 
-EnviroTime is a real-time embedded system developed using the LPC2148 ARM7 microcontroller.  
-The system continuously displays digital clock information along with live ambient temperature monitoring.
+EnviroTime is a real-time embedded system developed using the LPC2148 ARM7 microcontroller.
+
+The system continuously displays:
+
+- Digital Clock Information
+- Real-Time Temperature Monitoring
+- Multi-Alarm Management
 
 The project integrates:
 
@@ -13,7 +18,8 @@ The project integrates:
 - LM35 Temperature Sensor
 - 16x2 LCD Display
 - 4x4 Matrix Keypad
-- Alarm Functionality
+- Multi-Alarm Functionality
+- Flash-Based Password Storage
 - Password Protected Editing
 - Timer0 Based Hardware Delays
 - Buzzer Indication System
@@ -24,36 +30,38 @@ The system allows secure user-controlled modification of:
 - Alarm Settings
 - Password Settings
 
-through switch polling and keypad authentication.
+through keypad authentication and menu navigation.
 
 ---
 
 # Aim
 
-To design and develop a real-time embedded system using the LPC2148 microcontroller that displays accurate digital clock information along with continuous ambient temperature monitoring, while allowing secure user-controlled modification of time and alarm settings through switch-based polling and keypad authentication.
+To design and develop a real-time embedded system using the LPC2148 microcontroller that displays accurate digital clock information along with continuous ambient temperature monitoring while providing secure password-protected editing, persistent flash-based password storage, and multi-alarm scheduling functionality.
 
 ---
 
 # Objectives
 
-- Implement Real-Time Clock (RTC) for accurate display of:
+- Implement RTC for accurate display of:
   - Time
   - Date
   - Day
   - Month
   - Year
 
-- Monitor ambient temperature using LM35 sensor through on-chip ADC
+- Monitor ambient temperature using LM35 through ADC
 
 - Display RTC and temperature information on 16x2 LCD
 
-- Provide alarm setting functionality for user-defined alerts
+- Implement multi-alarm functionality
 
-- Interface keypad for secure password-based user input
+- Store password permanently in LPC2148 internal flash memory
 
-- Use switch polling for edit mode entry
+- Provide password-protected menu access
 
 - Generate buzzer indication during alarm events
+
+- Implement timeout-based embedded UI handling
 
 ---
 
@@ -102,31 +110,6 @@ To design and develop a real-time embedded system using the LPC2148 microcontrol
 
 ---
 
-# System Workflow
-
-The project continuously performs:
-
-- RTC Monitoring
-- Temperature Monitoring
-- Alarm Monitoring
-- LCD Updating
-- Keypad Scanning
-- Switch Polling
-
-The RTC module maintains:
-
-- Hour
-- Minute
-- Second
-- Date
-- Month
-- Year
-- Day
-
-The LM35 temperature sensor is interfaced through ADC and displays live room temperature on LCD.
-
----
-
 # LCD Display Format
 
 ```text
@@ -138,13 +121,18 @@ DD/MM/YYYY DAY
 
 # Alarm Features
 
-- Alarm configured using LPC2148 RTC Alarm Registers
+- Support for storing up to 5 alarms
+- Software-managed multi-alarm architecture
+- Alarm browsing using keypad navigation
+- Alarm enable/disable functionality
+- Alarm editing support
+- Alarm deletion support
 - Exact 30-second alarm ringing
 - Active HIGH buzzer support
 - Automatic snooze after 5 minutes
 - Maximum snooze count: 5 times
-- Manual alarm stop switch
-- Active LOW switch support
+- Manual alarm stop switch support
+- Timeout-based alarm menu handling
 
 ---
 
@@ -155,30 +143,35 @@ DD/MM/YYYY DAY
 Before allowing modifications:
 
 - User must enter password through keypad
-- Password validated against stored runtime password
+- Password validated against stored password
+- Password masking using '*' implemented
+- Backspace support implemented using D key
+- Timeout-based password entry implemented
+
+---
+
+## Flash-Based Password Storage
+
+The system stores the latest changed password inside LPC2148 internal flash memory.
+
+This allows:
+
+- Password retention after restart
+- Password retention after complete power OFF
+- Runtime password modification
+- Automatic password retrieval during startup
+
+Flash implementation uses:
+
+- LPC2148 Internal Flash Memory
+- IAP (In-Application Programming)
+- Dedicated flash sector storage
 
 ### Default Password
 
 ```text
 1234
 ```
-
----
-
-# Wrong Attempt Handling
-
-- Maximum attempts: 3
-
-After 3 wrong attempts:
-
-- System locked temporarily
-- LCD displays:
-
-```text
-LOCKED!
-```
-
-This provides a basic embedded security layer.
 
 ---
 
@@ -231,12 +224,17 @@ Validation implemented for:
 
 ---
 
-# Keypad Features
+# Enhanced Keypad Features
 
-- 4x4 Matrix keypad
-- Debounce handling implemented
-- Key release synchronization implemented
+- 4x4 Matrix keypad interface
+- Backspace support using D key
 - '#' key used as ENTER
+- Password masking using '*'
+- Maximum digit protection implemented
+- Input timeout handling implemented
+- Key release synchronization implemented
+- Debounce handling implemented
+- Empty input validation implemented
 
 ---
 
@@ -258,6 +256,30 @@ void tdelay_s(u32 sec);
 - Stable LCD timing
 - Better keypad response
 - Reliable alarm timing
+
+---
+
+# Timeout-Based UI Handling
+
+Timeout handling implemented across multiple menus.
+
+If user remains inactive for predefined duration:
+
+- Current menu automatically exits
+- System returns to previous screen
+
+Timeout support implemented in:
+
+- RTC Editing
+- Alarm Configuration
+- Password Entry
+- Menu Navigation
+
+Advantages:
+
+- Prevents UI lockup
+- Improves embedded user experience
+- Handles unattended operation safely
 
 ---
 
@@ -313,6 +335,39 @@ The project follows modular embedded design.
 
 ---
 
+# Flash Memory Implementation
+
+The project uses LPC2148 internal flash memory for persistent password storage.
+
+Features:
+
+- Password retained after power OFF
+- Password retained after restart
+- Automatic password loading during boot
+- Runtime password updates supported
+
+Implementation files:
+
+- flash.c
+- flash.h
+
+Flash operations implemented using:
+
+- LPC2148 IAP (In-Application Programming)
+- Internal flash sector management
+
+Selected Flash Sector:
+
+- Sector 14
+
+Flash Storage Address:
+
+```text
+0x0003C000
+```
+
+---
+
 # Project Structure
 
 ```text
@@ -327,6 +382,8 @@ Project
 ├── alarm.h
 ├── alarm_ring.c
 ├── alarm_ring.h
+├── flash.c
+├── flash.h
 ├── lcd.c
 ├── lcd.h
 ├── kpm.c
@@ -364,13 +421,16 @@ where both timekeeping and environmental monitoring are important.
 
 Possible future enhancements:
 
-- EEPROM based password storage
-- Multiple alarms
+- External EEPROM support
 - UART debugging support
 - 12-hour clock mode
 - Melody alarm tones
 - External RTC module support
-- Interrupt based alarm handling
+- Interrupt-based keypad handling
+- SD card logging
+- Bluetooth connectivity
+- GSM alert integration
+- Mobile app synchronization
 
 ---
 
@@ -383,6 +443,10 @@ The project follows:
 - Peripheral abstraction
 - Hardware timer based delay handling
 - State-machine architecture
+- Flash memory management using LPC2148 IAP
+- Software-managed multi-alarm architecture
+- Timeout-based embedded UI handling
+- Persistent password storage implementation
 
 ---
 

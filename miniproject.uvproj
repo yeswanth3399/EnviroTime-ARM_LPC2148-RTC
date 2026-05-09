@@ -493,6 +493,11 @@
               <FileType>1</FileType>
               <FilePath>.\delays.c</FilePath>
             </File>
+            <File>
+              <FileName>flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\flash.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

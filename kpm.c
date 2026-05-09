@@ -8,7 +8,7 @@
 #include "lcd.h"
 #include "timer0_delay.h"
 
-#define PROTEUS
+//#define PROTEUS
 
 #ifdef PROTEUS
 u8 kpmLUT[4][4]=

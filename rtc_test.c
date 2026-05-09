@@ -24,12 +24,13 @@
 #include "menu.h"
 #include "alarm.h"
 #include "alarm_ring.h"
+#include "flash.h"
 
 //timer delays
 #include "timer0_delay.h"
 
 //default password stores in RAM at initial state
-char stored_pass[8]= "1234";
+char stored_pass[8];
 
 state_t state = STATE_NORMAL;
 
@@ -49,6 +50,8 @@ int main()
 	//cfg buzzer pin as gpio out
 	IODIR0|= 1<<BUZZER_PIN;
 	
+	//retrieve the last changed password
+	flash_read_password(stored_pass);
 	
   while (1) 
   {

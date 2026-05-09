@@ -13,8 +13,8 @@ typedef void (*IAP)(unsigned int[], unsigned int[]);
 static IAP iap = (IAP)IAP_LOCATION;
 
 // Last sector of LPC2148
-#define FLASH_SECTOR   26
-#define FLASH_ADDR     0x0007D000
+#define FLASH_SECTOR	14
+#define FLASH_ADDR		0x0003C000
 
 #define CCLK_KHZ       60000
 

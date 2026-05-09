@@ -4,6 +4,7 @@
 #include "lcd_defines.h"
 #include "kpm.h"
 #include "timer0_delay.h"
+#include "flash.h"
 #include <string.h>
 
 int password_check(char *stored)
@@ -152,6 +153,7 @@ void change_password(char *stored)
 
 		// Update password in RAM
     strcpy(stored,newp);
+	flash_write_password(stored);
 
     CmdLCD(CLEAR_LCD);
     StrLCD("Updated!");
