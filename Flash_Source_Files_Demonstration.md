@@ -480,7 +480,7 @@ Command Successful
 # 17. FLASH BUFFER
 
 ```c
-flash_t flash_buffer __attribute__((aligned(256)));
+__align(256) static flash_t data;
 ```
 
 ## Purpose

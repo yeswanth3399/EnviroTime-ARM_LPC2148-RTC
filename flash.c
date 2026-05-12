@@ -8,7 +8,47 @@
 
 #define IAP_LOCATION 0x7FFFFFF1
 
+
+/*LPC2148 stores built-in flash programming functions inside internal ROM.
+
+These ROM functions are called:
+
+IAP routines
+In-Application Programming routines
+
+The ROM function exists at fixed address:
+
+#define IAP_LOCATION 0x7FFFFFF1
+
+This address contains internal NXP ROM flash programming code.
+
+To execute that ROM function,
+we must call it using a function pointer.
+*/
+
 typedef void (*IAP)(unsigned int[], unsigned int[]);
+
+/*FUNCTION POINTER CREATION
+IAP iap_entry = (IAP)IAP_LOCATION;
+
+Explanation:
+
+IAP ? function pointer datatype
+iap_entry ? function pointer variable
+IAP_LOCATION ? ROM function address
+
+This statement means:
+
+iap_entry now points to LPC2148 internal ROM IAP function
+VISUAL REPRESENTATION
+iap_entry
+    |
+    |-----> 0x7FFFFFF1
+                  |
+                  |
+            LPC2148 ROM
+            IAP FUNCTIONS
+*/
 
 static IAP iap = (IAP)IAP_LOCATION;
 
