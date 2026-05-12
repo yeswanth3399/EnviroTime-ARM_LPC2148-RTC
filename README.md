@@ -309,7 +309,7 @@ Advantages:
 
 | Device | LPC2148 Pin |
 |----------|--------------|
-| Buzzer | P0.7 |
+| Buzzer | P0.19 |
 | Edit/Menu Switch | P0.22 |
 | Alarm Stop Switch | P0.23 |
 
@@ -365,7 +365,7 @@ Flash Storage Address:
 ```text
 0x0003C000
 ```
-
+Refer to Flash_Source_Files_Demonstration.md file for detail information.
 ---
 
 # Project Structure

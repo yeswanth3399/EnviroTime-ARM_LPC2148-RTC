@@ -78,7 +78,7 @@ u8 KeyScan(void)
 	while(ColScan());
 	
 	//debounce delay
-	tdelay_ms(20);
+	tdelay_ms(50);
 	
 	//if any key was pressed
 	//identify row in which key was pressed
@@ -89,7 +89,7 @@ u8 KeyScan(void)
 	KeyV=kpmLUT[r][c];
 	
 	//debounce delay
-	tdelay_ms(20);
+	tdelay_ms(50);
 	
 	return KeyV;
 }
